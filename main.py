@@ -197,28 +197,34 @@ def handle_challenge_response(bot, update):
     del current_challenges[ch_id]
     cch_lock.release()
 
-    # lift the restriction
-    try:
-        bot.restrict_chat_member(chat, target,
-            can_send_messages=True, can_send_media_messages=True,
-            can_send_other_messages=True, can_add_web_page_previews=True)
-    except TelegramError:
-        # This my happen when the bot is deop-ed after the user join
-        # and before the user click the button
-        # TODO: design messages for this occation
-        pass
-
-    bot.answer_callback_query(callback_query_id=query['id'])
-
-    # verify the ans
     correct = (str(challenge.ans()) == query['data'])
-    msg = 'msg_challenge_passed' if correct else 'msg_challenge_mercy_passed'
-    bot.edit_message_text(group_config[msg],
-        chat_id=chat, message_id=bot_msg, reply_mark=None)
 
-    if group_config['delete_passed_challenge']:
-        challenge_sched.enter(group_config['delete_passed_challenge_interval'],
-            5, bot.delete_message, argument=(chat, bot_msg))
+    if correct: # Chanllenge question answered correctly
+        # lift the restriction
+        try:
+            bot.restrict_chat_member(chat, target,
+                can_send_messages=True, can_send_media_messages=True,
+                can_send_other_messages=True, can_add_web_page_previews=True)
+        except TelegramError:
+            # This my happen when the bot is deop-ed after the user join
+            # and before the user click the button
+            # TODO: design messages for this occation
+            pass
+
+        bot.answer_callback_query(callback_query_id=query['id'])
+
+        msg = 'msg_challenge_passed'
+        bot.edit_message_text(group_config[msg],
+            chat_id=chat, message_id=bot_msg, reply_mark=None)
+
+        if group_config['delete_passed_challenge']:
+            challenge_sched.enter(group_config['delete_passed_challenge_interval'],
+                                  5, bot.delete_message, argument=(chat, bot_msg))
+
+    else:   # Wrongly answered challenge question
+        msg = 'msg_challenge_failed'
+        bot.edit_message_text(group_config[msg],
+            chat_id=chat, message_id=bot_msg, reply_mark=None)
 
 
 def main():
