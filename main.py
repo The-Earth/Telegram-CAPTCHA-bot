@@ -66,10 +66,8 @@ def challenge_user(bot, update):
     challenge = Challenge()
 
     def challenge_to_buttons(ch):
-        choices = [[InlineKeyboardButton(str(c), callback_data=str(c))]
-            for c in ch.choices()]
         # manual approval/refusal by group admins
-        return choices + [[InlineKeyboardButton(
+        return [[InlineKeyboardButton(
             group_config['msg_approve_manually'], callback_data='+'),
         InlineKeyboardButton(group_config['msg_refuse_manually'],
             callback_data='-')]]
@@ -77,8 +75,7 @@ def challenge_user(bot, update):
     timeout = group_config['challenge_timeout']
 
     bot_msg = bot.send_message(chat_id=msg.chat.id,
-        text=group_config['msg_challenge'].format(
-            timeout=timeout, challenge=challenge.qus()),
+        text=group_config['msg_challenge'],
         reply_to_message_id=msg.message_id,
         reply_markup=InlineKeyboardMarkup(challenge_to_buttons(challenge)))
 
@@ -196,35 +193,6 @@ def handle_challenge_response(bot, update):
     cch_lock.acquire()
     del current_challenges[ch_id]
     cch_lock.release()
-
-    correct = (str(challenge.ans()) == query['data'])
-
-    if correct: # Chanllenge question answered correctly
-        # lift the restriction
-        try:
-            bot.restrict_chat_member(chat, target,
-                can_send_messages=True, can_send_media_messages=True,
-                can_send_other_messages=True, can_add_web_page_previews=True)
-        except TelegramError:
-            # This my happen when the bot is deop-ed after the user join
-            # and before the user click the button
-            # TODO: design messages for this occation
-            pass
-
-        bot.answer_callback_query(callback_query_id=query['id'])
-
-        msg = 'msg_challenge_passed'
-        bot.edit_message_text(group_config[msg],
-            chat_id=chat, message_id=bot_msg, reply_mark=None)
-
-        if group_config['delete_passed_challenge']:
-            challenge_sched.enter(group_config['delete_passed_challenge_interval'],
-                                  5, bot.delete_message, argument=(chat, bot_msg))
-
-    else:   # Wrongly answered challenge question
-        msg = 'msg_challenge_failed'
-        bot.edit_message_text(group_config[msg],
-            chat_id=chat, message_id=bot_msg, reply_mark=None)
 
 
 def main():
