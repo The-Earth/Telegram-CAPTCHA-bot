@@ -1,6 +1,10 @@
-# Telegram-CAPTCHA-bot
+# Telegram-CAPTCHA-bot (No-captcha version)
+
+This is a no-captcha version of the original Telegram-CAPTCHA-bot by Iziad. It restricts all new members and waits for admins to allow, maintain restriction or kick them out. 
 
 [简体中文](README.md)
+
+----
 
 A bot running on Telegram which will send CAPTCHA to verify if the new member is a human.
 
