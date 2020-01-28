@@ -1,0 +1,27 @@
+{
+    "token": "",
+    "api_id": "",
+    "api_hash": "",
+    "*": {
+        "msg_self_introduction": "我是自动禁言机器人，新人入群以后我会自动将他禁言。",
+        "msg_challenge_not_for_you": "这与你无关啦",
+        "msg_challenge": "您好，本群默认禁止发言。管理员可手动允许有需要的用户发言。",
+        "msg_challenge_passed": "管理员已手动允许您发言。",
+        "msg_challenge_mercy_passed": ".",
+        "msg_challenge_failed": "管理员未在一天内进行操作，故维持禁言。",
+        "msg_approve_manually": "允许发言",
+        "msg_refuse_manually": "踢出群组",
+        "msg_permission_denied": "您没有权限进行操作",
+        "msg_maintain_manually": "维持禁言",
+        "msg_bot_no_permission": "机器人没有权限进行操作，可能是没有授予机器人 Ban User 权限。",
+        "msg_approved": "您已被 {user} 允许发言",
+        "msg_refused": "该用户已被 {user} 踢出群组",
+        "msg_maintained": "{user} 选择维持该用户的禁言状态",
+        "challenge_timeout": 86400,
+        "challenge_timeout_action": "restrict",
+        "delete_passed_challenge": false,
+        "delete_passed_challenge_interval": 15,
+        "delete_failed_challenge": false,
+        "delete_failed_challenge_interval": 180
+    }
+}
