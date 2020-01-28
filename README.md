@@ -1,6 +1,10 @@
-# Telegram-CAPTCHA-bot
+# Telegram-CAPTCHA-bot (No captcha version)
 
 [English](README-en.md)
+
+本机器人是 Iziad 原版机器人的变种，去除了验证部分，改由管理员手动设定新入群用户的权限。新用户入群以后，自动将其禁言，并向管理员提供三个选项，分别是允许发言、保持禁言以及踢出群组。若等待一天后没有管理员进行操作，则维持禁言并移除三个选项。使用前所需的配置与原版相同，见下方原版的 README.md 。
+
+----
 
 一个 Telegram 机器人，通过点按钮的方式来判断加群者是否为真人。
 
